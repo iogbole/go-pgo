@@ -1,0 +1,32 @@
+{
+    "bio": {
+        "personal_info": {
+            "name": "John Doe",
+            "age": 30,
+            "location": "New York, USA"
+        },
+        "education": {
+            "high_school": {
+                "school_name": "Lincoln High School",
+                "graduation_year": 2008
+            },
+            "university": {
+                "school_name": "Harvard University",
+                "graduation_year": 2012,
+                "degree": "Bachelor of Science in Computer Science"
+            }
+        },
+        "work_experience": {
+            "job1": {
+                "company": "TechCorp",
+                "role": "Software Engineer",
+                "years": "2013-2017"
+            },
+            "job2": {
+                "company": "WebSolutions",
+                "role": "Senior Developer",
+                "years": "2017-Present"
+            }
+        }
+    }
+}

@@ -1,0 +1,46 @@
+-------Pre_PGO-----------
+
+$  go-wrk -d 60  http://localhost:8080
+Running 60s test @ http://localhost:8080
+  10 goroutine(s) running concurrently
+1557674 requests in 59.679437388s, 1.47GB read
+Requests/sec:           26100.68
+Transfer/sec:           25.29MB
+Overall Requests/sec:   25959.83
+Overall Transfer/sec:   25.15MB
+Fastest Request:        65µs
+Avg Req Time:           382µs
+Slowest Request:        56.609ms
+Number of Errors:       0
+10%:                    82µs
+50%:                    90µs
+75%:                    94µs
+99%:                    96µs
+99.9%:                  97µs
+99.9999%:               97µs
+99.99999%:              97µs
+stddev:                 651µs
+
+-------Post_PGO-----------
+
+go-wrk -d 60  http://localhost:8080
+Running 60s test @ http://localhost:8080
+  10 goroutine(s) running concurrently
+1626603 requests in 59.676111919s, 1.54GB read
+Requests/sec:           27257.19
+Transfer/sec:           26.41MB
+Overall Requests/sec:   27108.41
+Overall Transfer/sec:   26.27MB
+Fastest Request:        66µs
+Avg Req Time:           366µs
+Slowest Request:        57.569ms
+Number of Errors:       0
+10%:                    80µs
+50%:                    88µs
+75%:                    90µs
+99%:                    92µs
+99.9%:                  92µs
+99.9999%:               92µs
+99.99999%:              92µs
+stddev:                 655µs
+$ 
