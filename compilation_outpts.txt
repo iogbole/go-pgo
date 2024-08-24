@@ -1,4 +1,4 @@
-  go build -o without_pgo -gcflags="-m" main.go
+go build -o pre_pgo -gcflags="-m" main.go
 
 # command-line-arguments
 ./main.go:44:6: can inline extractNames
@@ -37,7 +37,7 @@
 $ 
 
 
-go build -o with_pgo -pgo=auto -gcflags="-m" main.go
+go build -o post_pgo -pgo=auto -gcflags="-m" main.go
 
 # command-line-arguments
 ./main.go:109:9: PGO devirtualizing interface call w.Write to http.(*response).Write
