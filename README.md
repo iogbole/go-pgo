@@ -1,76 +1,25 @@
-  go build -o without_pgo -gcflags="-m" main.go
 
-# command-line-arguments
-./main.go:44:6: can inline extractNames
-./main.go:75:14: inlining call to fmt.Println
-./main.go:76:14: inlining call to fmt.Println
-./main.go:77:14: inlining call to fmt.Println
-./main.go:80:30: inlining call to extractNames
-./main.go:81:14: inlining call to fmt.Println
-./main.go:55:13: inlining call to log.Println
-./main.go:56:31: inlining call to http.ListenAndServe
-./main.go:44:19: leaking param content: data
-./main.go:45:15: make([]string, 0) escapes to heap
-./main.go:59:16: leaking param: w
-./main.go:59:39: r does not escape
-./main.go:66:6: moved to heap: bios
-./main.go:75:14: ... argument does not escape
-./main.go:75:15: "Name:" escapes to heap
-./main.go:75:40: bio.PersonalInfo.Name escapes to heap
-./main.go:76:14: ... argument does not escape
-./main.go:76:15: "University:" escapes to heap
-./main.go:76:54: bio.Education.University.SchoolName escapes to heap
-./main.go:77:14: ... argument does not escape
-./main.go:77:15: "Current Job:" escapes to heap
-./main.go:77:54: bio.WorkExperience.Job2.Role escapes to heap
-./main.go:80:30: make([]string, 0) escapes to heap
-./main.go:81:14: ... argument does not escape
-./main.go:81:15: "Courses:" escapes to heap
-./main.go:81:27: courseNames escapes to heap
-./main.go:85:17: ([]byte)("Data processed successfully") escapes to heap
-../../sdk/go1.22.6/src/log/log.go:405:24: leaking param: b to result ~r0 level=0
-./main.go:55:13: ... argument does not escape
-./main.go:55:14: "Starting server on :8080" escapes to heap
-./main.go:55:13: func literal does not escape
-./main.go:56:11: ... argument does not escape
-./main.go:56:31: &http.Server{...} escapes to heap
-$ 
+> Read the full blog at [https://israelo.io/blog/pgo/](https://israelo.io/blog/pgo/)
+
+## Introduction 
+
+Over the past few months, I've had numerous discussions with practioners and colleagues on the benefits of Profile-Guided Optimization (PGO). While it’s a topic that generates significant interest, many find it challenging to get started or simply lack the time to explore it fully. As a **Product Manager** in the continuous profiling domain, my curiosity drove me to delve deeper into this subject. After studying various academic papers and articles, I decided to implement PGO myself, benchmarking its impact to assess its true value.
+
+My primary goal was to understand the challenges hindering PGO adoption and to identify key questions that could reveal customers' real pain points. Additionally, I aimed to explore the business value for end users. Specifically, I wanted to quantify how PGO impacts critical businesss KPIs such as conversion rates, latency, and even SLOs and SLAs.
+
+This blog summarizes my initial findings.
+
+**Key Takeaways:**
+
+- This blog offers a practical guide to implementing PGO, including insights on measuring performance gains through inlining, binary size analysis, and flamegraphs.
+  
+- In the example code provided, my analysis revealed a notable performance gain of approximately `6.92%` in compute efficiency—an impressive result considering it’s based on a small JSON unmarshalling task. The potential savings in a production environment could be even more substantial.
+
+- PGO can significantly boost code performance and optimize resource utilization, with the potential to reduce cloud spending by up to `14%` without any code changes.
+
+- Many developers and SREs are missing out on potential cost savings by not leveraging PGO. You can learn from Cloudflare's [experience](https://blog.cloudflare.com/reclaiming-cpu-for-free-with-pgo) in reducing costs through PGO.
+
+- Continuous profiling in production is essential to fully unlock the benefits of PGO.
 
 
-go build -o with_pgo -pgo=auto -gcflags="-m" main.go
-
-# command-line-arguments
-./main.go:109:9: PGO devirtualizing interface call w.Write to http.(*response).Write
-./main.go:51:6: can inline extractNames
-./main.go:67:6: can inline processor
-./main.go:89:13: inlining call to fmt.Println
-./main.go:92:29: inlining call to extractNames
-./main.go:109:9: inlining call to http.(*response).Write
-./main.go:62:13: inlining call to log.Println
-./main.go:63:31: inlining call to http.ListenAndServe
-./main.go:51:19: leaking param content: data
-./main.go:52:15: make([]string, 0, len(data)) escapes to heap
-./main.go:67:16: leaking param: w
-./main.go:67:39: r does not escape
-./main.go:76:6: moved to heap: bioWrapper
-./main.go:87:13: ... argument does not escape
-./main.go:87:14: "Name:" escapes to heap
-./main.go:87:39: bio.PersonalInfo.Name escapes to heap
-./main.go:88:13: ... argument does not escape
-./main.go:88:14: "University:" escapes to heap
-./main.go:88:53: bio.Education.University.SchoolName escapes to heap
-./main.go:89:13: ... argument does not escape
-./main.go:89:14: "Current Job:" escapes to heap
-./main.go:89:53: bio.WorkExperience.Job2.Role escapes to heap
-./main.go:92:29: make([]string, 0, len(data)) escapes to heap
-./main.go:93:13: ... argument does not escape
-./main.go:93:14: "Courses:" escapes to heap
-./main.go:93:26: courseNames escapes to heap
-./main.go:103:42: bioWrapper escapes to heap
-../../sdk/go1.22.6/src/log/log.go:405:24: leaking param: b to result ~r0 level=0
-./main.go:62:13: ... argument does not escape
-./main.go:62:14: "Starting server on :8080" escapes to heap
-./main.go:62:13: func literal does not escape
-./main.go:63:11: ... argument does not escape
-./main.go:63:31: &http.Server{...} escapes to heap
-$ 
+  <img  width="1510"  alt="prom"  src="https://github.com/user-attachments/assets/cb6c174b-7d05-49ad-b464-0247e26d9c89">
